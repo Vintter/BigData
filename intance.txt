@@ -1,0 +1,142 @@
+
+CREATE DATA BASE bigdata CHARACTER SET UTF8
+
+CREATE TABLE OCORRENCIA (
+    codigo_ocorencia int PRIMARY KEY,
+    codigo_ocorencia1 int,
+    codigo_ocorencia2 int,
+    codigo_ocorencia3 int,
+    codigo_ocorencia4 int,
+    ocorrencia_classificacao varchar(15),
+    ocorrencia_latitude double,
+    ocorrencia_longitude double,
+    ocorrencia_cidade varchar(20),
+    ocorrencia_uf char(2),
+    ocorrencia_pais varchar(12),
+    ocorrencia_aerodromo varchar(6),
+    ocorrencia_dia char(10),
+    ocorrencia_hora char(8),
+    investigacao_aeronave_liberada char(3),
+    investigacao_status varchar(10),
+    divulgacao_relatorio_numero varchar(20),
+    divulgacao_relatorio_publicado varchar(3),
+    divulgacao_dia_publicacao char(10),
+    total_recomendacoes int,
+    total_aeronaves_envolvidas smallint,
+    ocorrencia_saida_pista char(3)
+);
+
+
+CREATE TABLE RECOMENDACAO (
+    codigo_ocorencia int,
+    recomendacao_numero varchar(25) PRIMARY KEY,
+    recomendacao_dia_assinatura char(10),
+    recomendacao_dia_encaminhamento char(10),
+    recomendacao_dia_feedback varchar(10),
+    recomendacao_conteudo varchar(1000),
+    recomendacao_status varchar(20),
+    recomendacao_destinatario_sigla varchar(5),
+    recomendacao_destinatario varchar(40)
+);
+ 
+ALTER TABLE RECOMENDACAO ADD CONSTRAINT FK_RECOMENDACAO_2
+    FOREIGN KEY (codigo_ocorencia)
+    REFERENCES OCORRENCIA (codigo_ocorencia);
+
+
+
+
+CREATE TABLE OCORENCIA_TIPO (
+    codigo_ocorencia int,
+    ocorencia_tipo varchar(100),
+    ocorencia_tipo_categoria varchar(100),
+    taxonomia_tipo_icao varchar(10)
+);
+ 
+ALTER TABLE OCORENCIA_TIPO ADD CONSTRAINT FK_OCORENCIA_TIPO_1
+    FOREIGN KEY (codigo_ocorencia)
+    REFERENCES OCORRENCIA (codigo_ocorencia);
+
+
+
+
+CREATE TABLE FATOR_CONTRIBUENTE (
+    codigo_ocorencia int,
+    fator_nome varchar(40),
+    fator_aspecto varchar(50),
+    fator_condicionante varchar(25),
+    fator_area varchar(20)
+);
+ 
+ALTER TABLE FATOR_CONTRIBUENTE ADD CONSTRAINT FK_FATOR_CONTRIBUENTE_1
+    FOREIGN KEY (codigo_ocorencia)
+    REFERENCES OCORRENCIA (codigo_ocorencia);
+
+
+
+CREATE TABLE AERONAVE (
+    codigo_ocorencia int,
+    aeronave_matricula char(10),
+    aeronave_operador_categoria varchar(25),
+    aeronave_tipo_veiculo varchar(11),
+    aeronave_fabricante varchar(60),
+    aeronave_modelo varchar(35),
+    aeronave_tipo_icao varchar(10),
+    aeronave_motor_tipo varchar(15),
+    aeronave_motor_quantidade varchar(11),
+    aeronave_pmd int,
+    aeronave_pmd_categoria int,
+    aeronave_assentos int,
+    aeronave_ano_fabricacao int,
+    aeronave_pais_fabricante varchar(20),
+    aeronave_pais_registro varchar(20),
+    aeronave_registro_categoria varchar(11),
+    aeronave_registro_segmento varchar(25),
+    aeronave_voo_origem varchar(70),
+    aeronave_voo_destino varchar(50),
+    aeronave_fase_operacao varchar(40),
+    aeronave_tipo_operacao varchar(15),
+    aeronave_nivel_dano varchar(12),
+    aeronave_fatalidade_total smallint
+);
+ 
+ALTER TABLE AERONAVE ADD CONSTRAINT FK_AERONAVE_1
+    FOREIGN KEY (codigo_ocorencia)
+    REFERENCES OCORRENCIA (codigo_ocorencia);
+
+
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/ocorrencia.csv'
+INTO TABLE ocorrencia
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS ;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/recomendacao.csv'
+INTO TABLE recomendacao
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS ;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/ocorrencia_tipo.csv'
+INTO TABLE ocorrencia_tipo
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS ;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/fator_contribuinte.csv'
+INTO TABLE fator_contribuente
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS ;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/aeronave.csv'
+INTO TABLE aeronave
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS ;
